@@ -3,113 +3,25 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com">
 
   <title>Consider deploying cross-origin resource policy!</title>
 
-  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;800&family=Roboto+Mono&family=Roboto+Slab:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-  <style>
-    body, html {
-      border: 0;
-      padding: 0;
-      margin: 0;
-    }
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;800&family=Roboto+Slab:wght@100;500&display=swap" rel="stylesheet">
+  <link href="style.css" rel="stylesheet">
 
-    h1 {
-      background: black;
-      color: white;
-      padding: 40px;
-      font-size: 40px;
-      text-align: right;
-      font-weight: 100;
-      font-family: 'Roboto Slab', serif;
-      margin: 0 0 40px 0;
-    }
-
-    h1 span:last-child {
-      font-weight: 500;
-      font-family: 'Roboto Slab', serif;
-    }
-
-    p {
-      font: 18px/1.2 'Open Sans', sans-serif;
-      max-width: 750px;
-      margin: 0 auto 20px;
-      padding: 0 2ch;
-    }
-    
-    hr {
-      max-width: 750px;
-      margin: 3em auto;
-    }
-
-    h2 {
-      font: 24px/1.2 'Open Sans', sans-serif;
-      max-width: 750px;
-      margin: 0 auto 20px;
-      padding: 0 2ch;
-      font-weight: 800;
-    }
-      h2 code {
-        color: #07A;
-      }
-
-    h3 {
-      font: 18px/1.2 'Open Sans', sans-serif;
-      max-width: 750px;
-      margin: 0 auto 20px;
-      padding: 0 2ch;
-      font-weight: 800;
-      text-align: right;
-    }
-      h2 code {
-        color: #07A;
-      }
-
-    pre {
-      margin: 0 auto 20px;
-      padding: 20px 8px 20px 20px;
-      font: 24px/1.2  'Roboto Mono', monospace;
-      max-width: 710px;
-      white-space: normal;
-      text-align: center;
-      background: #FCFAEE;
-      border: 0 solid #E0CB52;
-      border-width: 0 0 0 0.5em;
-    }
-
-    code {
-      font-family: 'Roboto Mono', monospace;
-    }
-
-    .header {
-      color: #905;
-    }
-
-    .value {
-      color: #07a;
-    }
-
-    .tldr {
-      background: #E9FBE9;
-      border: 0 solid #52E052;
-      border-width: 0 0 0 0.5em;
-      padding: 20px;
-      max-width: 710px;
-      margin: 0 auto 20px;
-    }
-      .tldr code {
-        display: block;
-        margin: 12px 0;
-        text-align: center;
-        font-size: 24px;
-      }
-  </style>
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:site" content="@mikewest">
+  <meta name="og:title" content="Consider deploying Cross-Origin Resource Policy.">
+  <meta name="og:description" content="`Cross-Origin-Resource-Policy: same-origin` is always safe. `Cross-Origin-Resource-Policy: cross-site` is always compatible.">
+  <meta name="og:image" content="https://resourcepolicy.fyi/card.png">
 </head>
 <body>
   <h1>
     <span>Consider deploying</span><br>
     <span>Cross-Origin Resource Policy</span>.
   </h1>
+
   <aside class="tldr">
     <p>
       <strong>TL;DR:</strong>
@@ -185,7 +97,7 @@
     well... um... Did I mention that BootstrapCDN uses it?
   </p>
   
-  <h3>I already serve <code>Access-Control-Allow-Origin: *</code>. Do I need to add CORP too?</h3>
+  <h3>I already serve <code><span class="header">Access-Control-Allow-Origin</span>: <span class="value">*</span></code>. Do I need to add CORP too?</h3>
   <p>
     That depends on the folks that depend on you. <code>ACAO: *</code> only takes effect for requests
     that were made as CORS requests, and which explicitly dropped credentials. That is,
