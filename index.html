@@ -96,6 +96,19 @@
         text-align: center;
         font-size: 24px;
       }
+
+    footer {
+      background: black;
+      color: white;
+      margin: 0;
+      padding: 1ch 2ch;
+      font: 15px/1.4 'Open Sans', sans-serif;
+      text-align: right;
+    }
+      footer a, footer a:visited {
+        font-family: monospace;
+        color: #52cbff;
+      }
   </style>
 
   <meta name="twitter:card" content="summary">
@@ -106,6 +119,7 @@
   <meta name="og:image" content="https://resourcepolicy.fyi/card.png">
 </head>
 <body>
+  <article>
   <h1>
     <span>Consider deploying</span><br>
     <span>Cross-Origin Resource Policy</span>.
@@ -207,5 +221,9 @@
     <li>"<a href="https://docs.google.com/document/d/1zDlfvfTJ_9e8Jdc8ehuV4zMEu9ySMCiTGMS9y0GU92k/edit">COOP and COEP Explained</a>" is a good primer on <code>Cross-Origin-Opener-Policy</code>, and <code>Cross-Origin-Embedder-Policy</code>, which form the technical basis of the opt-in.</li>
     <li>The Fetch specification defines the <a href="https://fetch.spec.whatwg.org/#cross-origin-resource-policy-header"><code>Cross-Origin-Resource-Policy</code> header</a>.</li>
   </ul>
+  </article>
+  <footer>
+    Typos? Mistakes? Poke at <a href="https://github.com/mikewest/consider-deploying-corp">mikewest/consider-deploying-corp</a>.
+  </footer>
 </body>
 </html>
