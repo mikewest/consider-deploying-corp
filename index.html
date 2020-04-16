@@ -184,5 +184,19 @@
     No, of course not! Many sites use it today, like BootstrapCDN, for example! And also...
     well... um... Did I mention that BootstrapCDN uses it?
   </p>
+  
+  <h3>I already serve <code>Access-Control-Allow-Origin: *</code>. Do I need to add CORP too?</h3>
+  <p>
+    That depends on the folks that depend on you. <code>ACAO: *</code> only takes effect for requests
+    that were made as CORS requests, and which explicitly dropped credentials. That is,
+    <code>&lt;script ... crossorigin="anonymous"&gt;</code> will continue working, but
+    <code>&lt;script&gt;</code> will fail for developers who opt-into isolation.
+
+    You can determine how many folks are making CORS-enabled requests by taking a look at incoming
+    <code>Sec-Fetch-Mode</code> headers from browsers that support
+    <a href="https://w3c.github.io/webappsec-fetch-metadata/">Fetch Metadata</a>. It seems likely
+    that you'll see a mix of <code>cors</code> and <code>no-cors</code> requests. The former will
+    continue working for isolated sites, the latter will not.
+  </p>
 </body>
 </html>
