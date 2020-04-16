@@ -3,16 +3,101 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com">
 
   <title>Consider deploying cross-origin resource policy!</title>
 
+  <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;800&family=Roboto+Slab:wght@100;500&display=swap" rel="stylesheet">
-  <link href="style.css" rel="stylesheet">
+  <style>
+    body, html {
+      border: 0;
+      margin: 0;
+      padding: 0;
+    }
+
+    h1 {
+      background: black;
+      color: white;
+      font: 100 40px/1.2 'Roboto Slab', sans-serif;
+      margin: 0 0 40px 0;
+      padding: 40px;
+      text-align: right;
+    }
+      h1 span:last-child {
+        font-weight: 500;
+      }
+
+    h2 {
+      font: 800 24px/1.2 'Open Sans', sans-serif;
+      margin: 0 auto 20px;
+      max-width: 750px;
+      padding: 0 2ch;
+    }
+      h2 code {
+        color: #07A;
+      }
+
+    h3 {
+      font: 800 18px/1.2 'Open Sans', sans-serif;
+      margin: 0 auto 20px;
+      max-width: 750px;
+      padding: 0 2ch;
+      text-align: right;
+    }
+
+    hr {
+      margin: 3em auto;
+      max-width: 750px;
+    }
+
+    p {
+      font: 18px/1.2 'Open Sans', sans-serif;
+      margin: 0 auto 20px;
+      max-width: 750px;
+      padding: 0 2ch;
+    }
+
+    pre {
+      margin: 0 auto 20px;
+      padding: 20px 8px 20px 20px;
+      font: 24px/1.2 monospace;
+      max-width: 710px;
+      white-space: normal;
+      text-align: center;
+      background: #FCFAEE;
+      border: 0 solid #E0CB52;
+      border-width: 0 0 0 0.5em;
+    }
+
+    .header {
+      color: #905;
+    }
+
+    .value {
+      color: #07a;
+    }
+
+    .tldr {
+      background: #E9FBE9;
+      border: 0 solid #52E052;
+      border-width: 0 0 0 0.5em;
+      padding: 20px;
+      max-width: 710px;
+      margin: 0 auto 20px;
+    }
+      .tldr code {
+        display: block;
+        margin: 12px 0;
+        text-align: center;
+        font-size: 24px;
+      }
+  </style>
 
   <meta name="twitter:card" content="summary">
   <meta name="twitter:site" content="@mikewest">
   <meta name="og:title" content="Consider deploying Cross-Origin Resource Policy.">
+  <meta name="description" content="`Cross-Origin-Resource-Policy: same-origin` is always safe. `Cross-Origin-Resource-Policy: cross-site` is always compatible.">
   <meta name="og:description" content="`Cross-Origin-Resource-Policy: same-origin` is always safe. `Cross-Origin-Resource-Policy: cross-site` is always compatible.">
   <meta name="og:image" content="https://resourcepolicy.fyi/card.png">
 </head>
