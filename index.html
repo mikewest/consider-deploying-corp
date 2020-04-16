@@ -1,34 +1,185 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;800&family=Roboto+Slab:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Consider deploying cross-origin resource policy!</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;800&family=Roboto+Mono&family=Roboto+Slab:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
   <style>
+    body, html {
+      border: 0;
+      padding: 0;
+      margin: 0;
+    }
+
     h1 {
-  background: black;
-  color: white;
-  padding: 1em;
-  font-size: 40px;
-  text-align: right;
-  font-weight: 100;
-  font-family: 'Roboto Slab', serif;
-  margin-bottom: 1em;
-}
-h1 span:last-child {
-  font-weight: 500;
-  font-family: 'Roboto Slab', serif;
-}
-p {
-  font-family: 'Open Sans', sans-serif;
-  
-}
-strong { font-weight: 800; }
+      background: black;
+      color: white;
+      padding: 1em;
+      font-size: 40px;
+      text-align: right;
+      font-weight: 100;
+      font-family: 'Roboto Slab', serif;
+      margin: 0 0 1em 0;
+    }
+
+    h1 span:last-child {
+      font-weight: 500;
+      font-family: 'Roboto Slab', serif;
+    }
+
+    p {
+      font: 18px/1.2 'Open Sans', sans-serif;
+      max-width: 750px;
+      margin: 0 auto 1em;
+      padding: 0 2ch;
+    }
+    
+    hr {
+      max-width: 750px;
+      margin: 3em auto;
+    }
+
+    h2 {
+      font: 24px/1.2 'Open Sans', sans-serif;
+      max-width: 750px;
+      margin: 0 auto 1em;
+      padding: 0 2ch;
+      font-weight: 800;
+    }
+      h2 code {
+        color: #07A;
+      }
+
+    h3 {
+      font: 18px/1.2 'Open Sans', sans-serif;
+      max-width: 750px;
+      margin: 0 auto 1em;
+      padding: 0 2ch;
+      font-weight: 800;
+      text-align: right;
+    }
+      h2 code {
+        color: #07A;
+      }
+
+    pre {
+      margin: 0 auto 1em;
+      padding: 0 1em;
+      font: 24px/1.2  'Roboto Mono', monospace;
+      max-width: 750px;
+      white-space: normal;
+      text-align: center;
+    }
+
+    code {
+      font-family: 'Roboto Mono', monospace;
+    }
+
+    .header {
+      color: #905;
+    }
+
+    .value {
+      color: #07a;
+    }
+
+    .tldr {
+      background: #E9FBE9;
+      border: 0 solid #52E052;
+      border-width: 0 0 0 0.5em;
+      padding: 1em;
+      max-width: 750px;
+      margin: 0 auto 1em;
+    }
+      .tldr code {
+        display: block;
+        margin: 0.5em 0;
+        text-align: center;
+        font-size: 24px;
+      }
   </style>
 </head>
 <body>
   <h1>
-    <span>Consider deploying</span>
+    <span>Consider deploying</span><br>
     <span>Cross-Origin Resource Policy</span>.
   </h1>
-  <p><strong>TL;DR</strong>: 
+  <aside class="tldr">
+    <p>
+      <strong>TL;DR:</strong>
+
+      To ensure that a given resource is embeddable broadly, add the following
+      header to the response:
+    
+      <code><span class="header">Cross-Origin-Resource-Policy</span>: <span class="value">cross-origin</span></code>
+    </p>
+    <p>
+      To limit others' ability to embed a resource, set the header's value to
+      <span class="value">same-site</span> or <span class="value">same-origin</span> instead:
+
+      <code><span class="header">Cross-Origin-Resource-Policy</span>: <span class="value">same-site</span></code>
+    </p>
+  </aside>
+
+  <p>
+    The <code>Cross-Origin-Resource-Policy</code> (<abbr title="Cross-Origin Resource Policy">CORP</abbr>)
+    header allows you to control the set of origins that are empowered to embed your content. It's
+    going to become more important over time as browsers begin requiring sites to
+    <a href="https://docs.google.com/document/d/1zDlfvfTJ_9e8Jdc8ehuV4zMEu9ySMCiTGMS9y0GU92k/edit">isolate themselves</a>
+    in order to access certain features that make side-channel attacks easier (features like
+    <code>SharedArrayBuffer</code> or <code>performance.now()</code>). These isolated sites
+    can only embed same-origin resources, and resources that explicitly allow themselves to be
+    embedded via CORS on the one hand, or <abbr title="Cross-Origin Resource Policy">CORP</abbr>
+    on the other.
+  </p>
+  <p>
+    If you host resources that other depend upon, it would be an excellent idea to explicitly
+    assert a cross-origin resource policy. Happily, doing so is pretty straightforward, and
+    supported in all modern browsers. Even more happily, the assertion has no effect in
+    pre-modern browsers, so should be safe to roll out for all your users.
+  </p>
+  <p>
+    The header has three values: <code>same-origin</code>, <code>same-site</code>, and
+    <code>cross-origin</code>. Let's look at each in turn:
+  </p>
+
+  <h2>Limit usage with <code>same-origin</code> or <code>same-site</code></h2>
+  <p>
+    If a resource contains interesting information about a user, or is a response from an API that
+    you don't intend for others to use, then it's quite likely that you would be well-served by
+    asking the browser to ensure that it can't leak into cross-origin contexts by adding the
+    following response header to the relevant resources:
+  </p>
+  <pre><code><span class="header">Cross-Origin-Resource-Policy</span>: <span class="value">same-origin</span></code></pre>
+
+  <p>
+    Some applications can't lock themselves to a single origin, as they rely on resources shared
+    within a particular site. For example, consider <code>mail.example.com</code> and
+    <code>www.example.com</code>, which both rely on <code>single-sign-on.example.com</code> for
+    authentication, and <code>cdn.example.com</code> for static resources. These latter two origins
+    could not set <code>same-origin</code>, but they can set:
+  </o>
+  <pre><code><span class="header">Cross-Origin-Resource-Policy</span>: <span class="value">same-site</span></code></pre>
+
+  <h2>Broadly allow usage with <code>cross-origin</code></h2>
+  <p>
+    Do you serve resources that you want other sites to embed? Perhaps you're running a widely-used
+    CDN? Perhaps you're running an in-house CDN for a small suite of related sites? Perhaps you own
+    a third-party widget that you want to be used broadly? In all these cases, you'll want to make
+    the expectation explicit by adding the following response header to the relevant resources:
+  </p>
+  <pre><code><span class="header">Cross-Origin-Resource-Policy</span>: <span class="value">cross-origin</span></code></pre>
+
+  <hr>
+
+  <h2>FAQ</h2>
+  <h3>I'm not going to be the first one to use this header, am I?</h3>
+  <p>
+    No, of course not! Many sites use it today, like BootstrapCDN, for example! And also...
+    well... Did I mention that BootstrapCDN uses it?
+  </p>
 </body>
 </html>
