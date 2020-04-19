@@ -138,43 +138,15 @@
     <span>Cross-Origin Resource Policy</span>
   </h1>
 
-  <aside class="tldr">
-    <p>
-      <strong>TL;DR:</strong>
-
-      To ensure that a given resource is embeddable broadly, add the following
-      header to the response:
-    
-      <code><span class="header">Cross-Origin-Resource-Policy</span>: <span class="value">cross-origin</span></code>
-    </p>
-    <p>
-      To limit others' ability to embed a resource, set the header's value to
-      <span class="value">same-site</span> or <span class="value">same-origin</span> instead:
-
-      <code><span class="header">Cross-Origin-Resource-Policy</span>: <span class="value">same-site</span></code>
-    </p>
-  </aside>
-
   <p>
     The <code>Cross-Origin-Resource-Policy</code> (<abbr title="Cross-Origin Resource Policy">CORP</abbr>)
-    header allows you to control the set of origins that are empowered to embed your content. It's
-    going to become more important over time as browsers begin requiring sites to
-    <a href="https://docs.google.com/document/d/1zDlfvfTJ_9e8Jdc8ehuV4zMEu9ySMCiTGMS9y0GU92k/edit">isolate themselves</a>
-    in order to access certain features that make side-channel attacks easier (features like
-    <code>SharedArrayBuffer</code> or <code>performance.now()</code>). These isolated sites
-    can only embed same-origin resources, and resources that explicitly allow themselves to be
-    embedded via CORS on the one hand, or <abbr title="Cross-Origin Resource Policy">CORP</abbr>
-    on the other.
-  </p>
-  <p>
-    If you host resources that other depend upon, it would be an excellent idea to explicitly
-    assert a cross-origin resource policy. Happily, doing so is pretty straightforward, and
-    supported in all modern browsers. Even more happily, the assertion has no effect in
-    pre-modern browsers, so should be safe to roll out for all your users.
+    header allows you to control the set of origins that are empowered to include a resource. It is
+    a robust defense against attacks like <a href="https://meltdownattack.com/">Spectre</a>, as it
+    allows browsers to block a given response before it enters an attacker's process.
   </p>
   <p>
     The header has three values: <code>same-origin</code>, <code>same-site</code>, and
-    <code>cross-origin</code>. Let's look at each in turn:
+    <code>cross-origin</code>. Let's look at each:
   </p>
 
   <h2 id="same-origin">
@@ -210,6 +182,44 @@
   </p>
   <pre><code><span class="header">Cross-Origin-Resource-Policy</span>: <span class="value">cross-origin</span></code></pre>
 
+  <h2 id="corp-and-isolation">
+    <a href="#corp-and-isolation">§</a>
+    <abbr title="Cross-Origin Resource Policy">CORP</abbr> and Isolation
+  </h2>
+
+  <p>
+    Today, browsers act as though
+    <code><span class="header">Cross-Origin-Resource-Policy</span>: <span class="value">cross-origin</span></code>
+    is set on every response that lacks an explicit <abbr title="Cross-Origin Resource Policy">CORP</abbr>
+    header. This is a somewhat unfortunate default, and browsers are interested in shifting the
+    behavior for these resources to something more like <code class="value">same-origin</code>,
+    which will protect resources unless they explicitly opt-into being shared more widely. That
+    shift is going to take some time, however.
+  </p>
+  <p>
+    In the meantime, developers can opt-into a better default for their own pages by sending a
+    <a href="https://wicg.github.io/cross-origin-embedder-policy/"><code class="header">Cross-Origin-Embedder-Policy</code></a>
+    header, which will prevent them from loading cross-origin resources that don't explicitly
+    assert 
+    <code><span class="header">Cross-Origin-Resource-Policy</span>: <span class="value">cross-origin</span></code>
+    (or grant full access via <abbr title="Cross-Origin Resource Sharing">CORS</abbr>. Over time,
+    browsers will begin requiring pages to
+    <a href="https://docs.google.com/document/d/1zDlfvfTJ_9e8Jdc8ehuV4zMEu9ySMCiTGMS9y0GU92k/edit">opt-into cross-origin isolation</a>
+    in order to access certain features that make side-channel attacks more effective (for example,
+    high-resolution timers like <code>performance.now()</code> or <code>SharedArrayBuffer</code>).
+    With this in mind, it seems likely that usage of
+    <code class="header">Cross-Origin-Embedder-Policy</code> will increase over time, and therefore
+    that <code class="header">Cross-Origin-Resource-Policy</code> will be important to consider when
+    configuring your server.
+  </p>
+  <p>
+    In particular, if you host resources that others depend upon, it would be an excellent idea to
+    explicitly assert a cross-origin resource policy so that you're not a roadblock to isolation.
+    Happily, doing so is pretty straightforward, and supported in all modern browsers. Even more
+    happily, the assertion has no effect in pre-modern browsers, so should be safe to roll out
+    for all your users.
+  </p>
+
   <hr>
 
   <h2>FAQ</h2>
@@ -223,7 +233,8 @@
   </p>
   
   <h3 id="acao">
-    I already serve <code><span class="header">Access-Control-Allow-Origin</span>: <span class="value">*</span></code>. Do I need to add CORP too?
+    I already assert <code><span class="header">Access-Control-Allow-Origin</span>: <span class="value">*</span></code>
+    for public resources. Do I need to add CORP too?
     <a href="#acao">§</a>
   </h3>
   <p>
